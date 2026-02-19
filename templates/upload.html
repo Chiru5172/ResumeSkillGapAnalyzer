@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h2>Upload Resume for Analysis</h2>
+
+    <form method="POST" action="/analyze" enctype="multipart/form-data">
+
+        <input type="text"
+               name="job_role"
+               placeholder="Enter desired job role (e.g. Data Analyst)"
+               required
+               class="input-field">
+
+        <br><br>
+
+        <input type="file"
+               name="resume"
+               accept=".pdf,.docx"
+               required>
+
+        <br><br>
+
+        <button class="btn">Analyze Resume</button>
+    </form>
+</div>
+{% endblock %}

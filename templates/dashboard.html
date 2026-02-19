@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ===== PASS DATA TO JAVASCRIPT (CORRECT JINJA SYNTAX) ===== -->
+<script>
+    window.matchedCount = {{ matched_count }};
+    window.missingCount = {{ missing_count }};
+    window.extractedCount = {{ extracted_count }};
+    window.requiredCount = {{ required_count }};
+</script>
+
+<div class="card">
+
+    <h2>Resume Analysis Dashboard</h2>
+    <p><strong>Resume ID:</strong> {{ resume_id }}</p>
+
+    <hr>
+
+    <!-- ===== EXTRACTED SKILLS ===== -->
+    <div class="section">
+        <h3>Extracted Skills</h3>
+        <ul class="skill-list">
+            {% for skill in skills %}
+                <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- ===== REQUIRED SKILLS ===== -->
+    <div class="section">
+        <h3>Required Skills for Job Role</h3>
+        <ul class="skill-list">
+            {% for skill in required_skills %}
+                <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <hr>
+
+    <!-- ===== SKILL GAP ANALYSIS ===== -->
+    <div class="section">
+        <h3>Skill Match Analysis</h3>
+
+        <p class="match-score">
+            Match Percentage: <strong>{{ match_percentage }}%</strong>
+        </p>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar
+                {% if match_percentage >= 80 %}high
+                {% elif match_percentage >= 50 %}medium
+                {% else %}low{% endif %}"
+                style="width: {{ match_percentage }}%">
+                {{ match_percentage }}%
+            </div>
+        </div>
+
+        <!-- Recommendation -->
+        <p class="recommendation-text">
+            {% if match_percentage >= 80 %}
+                ✅ You are highly ready for this role. Focus on advanced projects.
+            {% elif match_percentage >= 50 %}
+                ⚠️ You are partially ready. Follow the roadmap to improve.
+            {% else %}
+                ❌ Significant skill gaps detected. Strongly follow the roadmap.
+            {% endif %}
+        </p>
+
+        <div class="skill-grid">
+            <div>
+                <h4>Matched Skills</h4>
+                <ul class="skill-list matched">
+                    {% for skill in matched_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                <h4>Missing Skills</h4>
+                <ul class="skill-list missing">
+                    {% for skill in missing_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ===== ROADMAP ===== -->
+    <div class="section">
+        <h3>Personalized Learning Roadmap</h3>
+
+        <div class="table-container">
+            <table class="roadmap-table">
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Skill</th>
+                        <th>Project</th>
+                        <th>Certification</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for step in roadmap %}
+                    <tr>
+                        <td>{{ step[0] }}</td>
+                        <td>{{ step[1] }}</td>
+                        <td>{{ step[2] }}</td>
+                        <td>{{ step[3] }}</td>
+                        <td>{{ step[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ===== ANALYTICS GRAPHS ===== -->
+    <div class="section">
+        <h3>Skill Analytics</h3>
+
+        <div class="chart-container">
+            <div class="chart-box">
+                <h4>Skill Match Ratio</h4>
+                <canvas id="skillPieChart"></canvas>
+            </div>
+
+            <div class="chart-box">
+                <h4>Skill Comparison</h4>
+                <canvas id="skillBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <a href="/" class="btn">Go Home</a>
+
+</div>
+
+<!-- ===== CHART JS SCRIPT ===== -->
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+{% endblock %}

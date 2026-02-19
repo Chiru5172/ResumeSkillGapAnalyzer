@@ -1,0 +1,6 @@
+flask
+mysql-connector-python
+pdfplumber
+python-docx
+nltk
+scikit-learn
